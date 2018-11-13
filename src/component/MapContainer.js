@@ -15,9 +15,9 @@ export class MapContainer extends Component {
   onReady(mapProps, map){
     const {google} = this.props;
     const opts = {
-      location: map.center,
+      location: {lat:32.8132922, lng:-96.7521698},
       radius: '1000',
-      types: ['food']
+      type: 'food'
     }
     searchNearby(google, map, opts)
     .then((results, pagination) => {
