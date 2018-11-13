@@ -1,12 +1,50 @@
 import React, { Component } from 'react';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+import {searchNearby} from '../utils/GoogleApi'
 
 export class MapContainer extends Component {
+  constructor(props){
+    super(props);
+
+    this.state = {
+      places:[],
+      pagination: null
+    }
+  }
+
+  onReady(mapProps, map){
+    const {google} = this.props;
+    const opts = {
+      location: map.center,
+      radius: '1000',
+      types: ['food']
+    }
+    searchNearby(google, map, opts)
+    .then((results, pagination) => {
+      this.setState({
+        places: results,
+        pagination
+      })
+    })
+    .catch((status, result) => {
+
+    })
+  }
   render() {
     return (
       <div>
-        <Map google={this.props.google} zoom={14}
+        <Map
+          onReady={this.onReady.bind(this)}
+          google={this.props.google}
+          visible={false}
         >
+          {this.state.places.map(place => {
+            return (
+              <div key={place.id}>
+                {place.name}
+              </div>
+            )
+          })}
           {/*
             <Marker onClick={this.onMarkerClick}
             name={'Current location'} />
