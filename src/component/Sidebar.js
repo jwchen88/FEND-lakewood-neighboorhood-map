@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ListPlaces from './ListPlaces.js'
 
 export class Sidebar extends Component {
   render(){
@@ -8,6 +9,10 @@ export class Sidebar extends Component {
         <div className="sidebar-title">
           <h2>{this.props.title}</h2>
         </div>
+        <ListPlaces
+          places={this.props.places}
+          //onClick={this.onClick.bind(this)}
+        />
       </div>
     )
   }
