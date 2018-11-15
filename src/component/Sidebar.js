@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import ListPlaces from './ListPlaces.js'
 
 export class Sidebar extends Component {
+
   render(){
     return(
       <div className="sidebar">
         <div className="sidebar-title">
-          <h2>{this.props.title}</h2>
+          <h2 tabindex="0">{this.props.title}</h2>
         </div>
         <ListPlaces
           places={this.props.places}

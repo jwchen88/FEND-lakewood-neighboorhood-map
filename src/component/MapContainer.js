@@ -9,7 +9,10 @@ export class MapContainer extends Component {
 
     this.state = {
       places:[],
-      pagination: null
+      pagination: null,
+      showingInfoWindow: false,
+      activeMarker: {},
+      selectedPlace: {},
     }
   }
 
@@ -32,54 +35,84 @@ export class MapContainer extends Component {
     })
   }
 
+  onMarkerClick = (props, marker, e) => {
+    this.setState({
+      selectedPlace: this.props,
+      activeMarker: marker,
+      showingInfoWindow: true
+    })
+  }
+
+  onClose = props => {
+    this.setState({
+      showingInfoWindow: false,
+      activeMarker: null
+    })
+  }
+
   renderMarkers() {
     if(!this.state.places){ return null; }
     return this.state.places.map(place =>{
       return <Marker
         key={place.id}
-        name={place.id}
-        place={place}
+        onClick={this.props.onMarkerClick}
+        name={place.name}
+        //place={place}
         position={place.geometry.location}
-      />
+             >
+
+        <InfoWindow
+          key= {place.id}
+          marker = {this.state.activeMarker}
+          visible = {this.state.showingInfoWindow}
+          onClose = {this.onClose}>
+          <div>
+            <h4>{this.state.selectedPlace.name}</h4>
+          </div>
+        </InfoWindow>
+
+      </Marker>
     })
   }
 
   render() {
     return (
       <div>
-        <Map
-          onReady={this.onReady.bind(this)}
-          google={this.props.google}
-          initialCenter={{
-            lat: 32.8124432,
-            lng: -96.7514695
-          }}
-          zoom={15}
-        >
+        <Sidebar
+          title={'Restaurants'}
+          //onListItemClick={this.onMarkerClick.bind(this)}
+          places={this.state.places}
+        />
 
-          {this.renderMarkers()}
+        <div className="map">
+          <Map
+            style={{height:'100%', width:'75vw', position: 'absolute'}}
+            onReady={this.onReady.bind(this)}
+            google={this.props.google}
+            initialCenter={{
+              lat: 32.8124432,
+              lng: -96.7514695
+            }}
+            zoom={15}
+          >
 
-          <Sidebar
-            title={'Restaurants'}
-            //onListItemClick={this.onMarkerClick.bind(this)}
-            places={this.state.places}
-          />
+            {this.renderMarkers()}
+          </Map>
+        </div>
 
-          {/*
-            <Marker onClick={this.onMarkerClick}
-            name={'Current location'} />
+        {/*
 
             <InfoWindow onClose={this.onInfoWindowClose}>
-              <div>
+            <div>
             <h1>{this.state.selectedPlace.name}</h1>
-              </div>
+            </div>
             </InfoWindow>
-          */}
+        */}
 
-        </Map>
-      </div>
 
-    );
+</div>
+
+);
   }
 }
 

@@ -24,11 +24,12 @@ export class ListPlaces extends Component {
     } else {
       showingPlaces = this.props.places
     }
-    
+
     return (
       <div className="place-list">
         <div className="search">
           <input
+            aria-label="search restaurants"
             className="search-restaurant"
             type="text"
             placeholder="Search"
