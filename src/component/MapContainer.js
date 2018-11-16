@@ -41,6 +41,7 @@ export class MapContainer extends Component {
       activeMarker: marker,
       showingInfoWindow: true
     })
+    console.log(this.props.selectedPlace)
   }
 
   onClose = props => {
@@ -55,7 +56,7 @@ export class MapContainer extends Component {
     return this.state.places.map(place =>{
       return <Marker
         key={place.id}
-        onClick={this.props.onMarkerClick}
+        onClick={this.onMarkerClick}
         name={place.name}
         //place={place}
         position={place.geometry.location}
@@ -93,7 +94,7 @@ export class MapContainer extends Component {
               lat: 32.8124432,
               lng: -96.7514695
             }}
-            zoom={15}
+            zoom={16}
           >
 
             {this.renderMarkers()}

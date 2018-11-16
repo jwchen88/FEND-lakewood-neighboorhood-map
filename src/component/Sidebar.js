@@ -8,7 +8,7 @@ export class Sidebar extends Component {
     return(
       <div className="sidebar">
         <div className="sidebar-title">
-          <h2 tabindex="0">{this.props.title}</h2>
+          <h2 tabIndex="0">{this.props.title}</h2>
         </div>
         <ListPlaces
           places={this.props.places}

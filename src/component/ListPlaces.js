@@ -4,7 +4,7 @@ import Place from './Place.js'
 import escapeRegExp from 'escape-string-regexp'
 
 export class ListPlaces extends Component {
-  static PropTypes = {
+  static propTypes = {
     places: PropTypes.array.isRequired
   }
 
