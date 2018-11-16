@@ -37,11 +37,10 @@ export class MapContainer extends Component {
 
   onMarkerClick = (props, marker, e) => {
     this.setState({
-      selectedPlace: this.props,
+      selectedPlace: this.prop,
       activeMarker: marker,
       showingInfoWindow: true
     })
-    console.log(this.props.selectedPlace)
   }
 
   onClose = props => {
@@ -58,21 +57,10 @@ export class MapContainer extends Component {
         key={place.id}
         onClick={this.onMarkerClick}
         name={place.name}
-        //place={place}
+        place={place}
         position={place.geometry.location}
-             >
+             />
 
-        <InfoWindow
-          key= {place.id}
-          marker = {this.state.activeMarker}
-          visible = {this.state.showingInfoWindow}
-          onClose = {this.onClose}>
-          <div>
-            <h4>{this.state.selectedPlace.name}</h4>
-          </div>
-        </InfoWindow>
-
-      </Marker>
     })
   }
 
@@ -98,6 +86,17 @@ export class MapContainer extends Component {
           >
 
             {this.renderMarkers()}
+
+            <InfoWindow
+              key= {this.state.places.id}
+              marker = {this.state.activeMarker}
+              visible = {this.state.showingInfoWindow}
+              onClose = {this.onClose}>
+              <div>
+                <h4>{this.state.places.name}</h4>
+              </div>
+            </InfoWindow>
+
           </Map>
         </div>
 
