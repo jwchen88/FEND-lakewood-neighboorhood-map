@@ -37,10 +37,11 @@ export class MapContainer extends Component {
 
   onMarkerClick = (props, marker, e) => {
     this.setState({
-      selectedPlace: this.prop,
+      selectedPlace: props,
       activeMarker: marker,
       showingInfoWindow: true
     })
+    console.log(this.props.selectedPlace)
   }
 
   onClose = props => {
@@ -58,6 +59,8 @@ export class MapContainer extends Component {
         onClick={this.onMarkerClick}
         name={place.name}
         place={place}
+        rating={place.rating}
+        vicinity={place.vicinity}
         position={place.geometry.location}
              />
 
@@ -69,7 +72,7 @@ export class MapContainer extends Component {
       <div>
         <Sidebar
           title={'Restaurants'}
-          //onListItemClick={this.onMarkerClick.bind(this)}
+          onListItemClick={this.onMarkerClick.bind(this)}
           places={this.state.places}
         />
 
@@ -88,31 +91,22 @@ export class MapContainer extends Component {
             {this.renderMarkers()}
 
             <InfoWindow
-              key= {this.state.places.id}
+              key= {this.state.selectedPlace.id}
               marker = {this.state.activeMarker}
               visible = {this.state.showingInfoWindow}
               onClose = {this.onClose}>
               <div>
-                <h4>{this.state.places.name}</h4>
+                <h4>{this.state.selectedPlace.name}</h4>
+                <p>Rating: {this.state.selectedPlace.rating}</p>
+                <p>Address: {this.state.selectedPlace.vicinity}</p>
               </div>
             </InfoWindow>
 
           </Map>
         </div>
+      </div>
 
-        {/*
-
-            <InfoWindow onClose={this.onInfoWindowClose}>
-            <div>
-            <h1>{this.state.selectedPlace.name}</h1>
-            </div>
-            </InfoWindow>
-        */}
-
-
-</div>
-
-);
+    );
   }
 }
 
