@@ -41,7 +41,6 @@ export class MapContainer extends Component {
       activeMarker: marker,
       showingInfoWindow: true
     })
-    console.log(this.props.selectedPlace)
   }
 
   onClose = props => {

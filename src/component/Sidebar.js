@@ -3,6 +3,12 @@ import PropTypes from 'prop-types';
 import ListPlaces from './ListPlaces.js'
 
 export class Sidebar extends Component {
+  onClick(place, map, google){
+    if (this.props.onListItemClick){
+      place.place=place;
+      this.props.onListItemClick(place,map,google)
+    }
+  }
 
   render(){
     return(
@@ -12,7 +18,7 @@ export class Sidebar extends Component {
         </div>
         <ListPlaces
           places={this.props.places}
-          //onClick={this.onClick.bind(this)}
+          onClick={this.onClick.bind(this)}
         />
       </div>
     )

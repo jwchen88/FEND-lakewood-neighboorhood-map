@@ -40,9 +40,9 @@ export class ListPlaces extends Component {
         {showingPlaces.map(place => {
           return (
             <Place
-              place={place}
-              //onClick={this.props.onClick}
               key={place.id}
+              place={place}
+              onClick={this.props.onClick}
             />
           )
         })}
