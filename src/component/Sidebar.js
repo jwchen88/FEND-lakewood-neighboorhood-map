@@ -12,7 +12,7 @@ export class Sidebar extends Component {
 
   render(){
     return(
-      <div className="sidebar">
+      <div className="sidebar" aria-label="restaurant navigation">
         <div className="sidebar-title">
           <h2 tabIndex="0">{this.props.title}</h2>
         </div>

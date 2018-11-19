@@ -9,6 +9,7 @@ export class Place extends Component {
     const{place}=this.props;
     return (
       <div className="place"
+        aria-label="place.name"
         onClick={this.onClick.bind(this)}
       >
 

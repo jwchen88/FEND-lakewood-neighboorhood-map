@@ -31,7 +31,7 @@ export class MapContainer extends Component {
       })
     })
     .catch((status, result) => {
-
+      console.log('Error fetching nearby', status)
     })
   }
 
@@ -55,12 +55,14 @@ export class MapContainer extends Component {
     return this.state.places.map(place =>{
       return <Marker
         key={place.id}
-        onClick={this.onMarkerClick}
+        onClick={this.onMarkerClick.bind(this)}
         name={place.name}
         place={place}
         rating={place.rating}
         vicinity={place.vicinity}
         position={place.geometry.location}
+        map={this.props.map}
+        animation={window.google.maps.Animation.DROP}
              />
 
     })
@@ -74,8 +76,7 @@ export class MapContainer extends Component {
           onListItemClick={this.onMarkerClick.bind(this)}
           places={this.state.places}
         />
-
-        <div className="map">
+        <div className="map" aria-label="map" role="application">
           <Map
             style={{height:'100%', width:'75vw', position: 'absolute'}}
             onReady={this.onReady.bind(this)}

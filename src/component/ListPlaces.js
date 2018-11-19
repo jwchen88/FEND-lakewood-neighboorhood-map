@@ -26,7 +26,7 @@ export class ListPlaces extends Component {
     }
 
     return (
-      <div className="place-list">
+      <div className="place-list" aria-label="restaurant list">
         <div className="search">
           <input
             aria-label="search restaurants"
