@@ -1,115 +1,172 @@
-import React, { Component } from 'react';
-import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
-import {searchNearby} from '../utils/GoogleApi'
-import Sidebar from './Sidebar.js'
+import React, { Component } from "react";
+import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
+//import { searchNearby } from "../utils/GoogleApi";
+import Sidebar from "./Sidebar.js";
+import axios from 'axios'
+import escapeRegExp from "escape-string-regexp";
 
 export class MapContainer extends Component {
-  constructor(props){
-    super(props);
+  state = {
+    places: [],
+    pagination: null,
+    showingInfoWindow: false,
+    activeMarker: null,
+    selectedPlace: [],
+    markers: [],
+    infoWindow: null,
+    map: null,
+    query: ""
+  };
 
-    this.state = {
-      places:[],
-      pagination: null,
-      showingInfoWindow: false,
-      activeMarker: {},
-      selectedPlace: {},
-    }
+/*
+  onReady(mapProps, map) {
+    const { google } = this.props;
+    const opts = {
+      location: { lat: 32.8124432, lng: -96.7514695 },
+      radius: "500",
+      type: ["restaurant"]
+    };
+    searchNearby(google, map, opts)
+      .then((results, pagination) => {
+        this.setState({
+          places: results,
+          pagination,
+          map
+        });
+      })
+      .catch((status, result) => {});
+  }
+  */
+
+//get data from four square
+  componentDidMount(){
+    this.getVenues()
   }
 
-  onReady(mapProps, map){
-    const {google} = this.props;
-    const opts = {
-      location: {lat:32.8124432, lng:-96.7514695},
-      radius: '500',
-      type: ['restaurant']
+  getVenues = () => {
+    const endPoint = "https://api.foursquare.com/v2/venues/search?"
+    const parameters = {
+      client_id: "HHUV2BREYTPF4NC4ANOYCCROTNLB4FQATM4TVC4ULI4DUA0T",
+      client_secret: "B3Y3MCPEXNGDF5U03GJON1J10JIZIQIO05WAYQFO1GLPJUH0",
+      radius: "500",
+      limit: "20",
+      categoryId: "4d4b7105d754a06374d81259",
+      ll: "32.8132922, -96.7521698",
+      v: "20181111"
     }
-    searchNearby(google, map, opts)
-    .then((results, pagination) => {
+
+    axios.get(endPoint + new URLSearchParams(parameters))
+    .then(response => {
       this.setState({
-        places: results,
-        pagination
+        places: response.data.response.venues
       })
     })
-    .catch((status, result) => {
-      console.log('Error fetching nearby', status)
+    .catch(error => {
+      console.log("Error!" + error)
     })
   }
 
+//Click on a Marker
   onMarkerClick = (props, marker, e) => {
+    this.killAnimation();
+    const { map, infoWindow } = this.state;
+    //Change the content
+    this.state.infoWindow.setContent(`
+      <div>
+      <h4>${props.name}</h4>
+      <p>Address: ${props.address}</p>
+      </div>
+    `);
+    //Open An InfoWindow
+    if (marker !== undefined) {
+      infoWindow.open(map, marker);
+    } else {
+      this.state.markers.map(marker => {
+        if (props.name === marker.name) {
+          infoWindow.open(map, marker);
+        }
+      });
+    }
+  };
+
+  componentWillMount = () => {
+    const infoWindow = new window.google.maps.InfoWindow();
     this.setState({
-      selectedPlace: props,
-      activeMarker: marker,
-      showingInfoWindow: true
-    })
-  }
+      infoWindow
+    });
+  };
 
-  onClose = props => {
-    this.setState({
-      showingInfoWindow: false,
-      activeMarker: null
-    })
-  }
+  killAnimation = () => {
+    this.state.markers.map(marker => marker.setAnimation(null));
+  };
 
-  renderMarkers() {
-    if(!this.state.places){ return null; }
-    return this.state.places.map(place =>{
-      return <Marker
-        key={place.id}
-        onClick={this.onMarkerClick.bind(this)}
-        name={place.name}
-        place={place}
-        rating={place.rating}
-        vicinity={place.vicinity}
-        position={place.geometry.location}
-        map={this.props.map}
-        animation={window.google.maps.Animation.DROP}
-             />
+  refs = [];
 
-    })
-  }
+  addRefs = elem => {
+    this.setState(
+      prevState => ({
+        markers: [...prevState.markers, elem.marker]
+      }),
+      () => console.log(this.state.markers)
+    );
+  };
+
+  updateQuery = query => {
+    this.setState({ query: query });
+  };
 
   render() {
+    let showingPlaces;
+    if (this.state.query) {
+      const match = new RegExp(escapeRegExp(this.state.query), "i");
+      showingPlaces = this.props.places.filter(place => match.test(place.name));
+    } else {
+      showingPlaces = this.props.places;
+    }
+
     return (
       <div>
         <Sidebar
-          title={'Restaurants'}
+          title={"Restaurants"}
           onListItemClick={this.onMarkerClick.bind(this)}
           places={this.state.places}
         />
-        <div className="map" aria-label="map" role="application">
+
+        <div className="map">
           <Map
-            style={{height:'100%', width:'75vw', position: 'absolute'}}
-            onReady={this.onReady.bind(this)}
+            style={{ height: "100%", width: "75vw", position: "absolute" }}
+            //onReady={this.onReady.bind(this)}
             google={this.props.google}
             initialCenter={{
               lat: 32.8124432,
               lng: -96.7514695
             }}
-            zoom={16}
-          >
-
-            {this.renderMarkers()}
-
-            <InfoWindow
-              key= {this.state.selectedPlace.id}
-              marker = {this.state.activeMarker}
-              visible = {this.state.showingInfoWindow}
-              onClose = {this.onClose}>
-              <div>
-                <h4>{this.state.selectedPlace.name}</h4>
-                <p>Rating: {this.state.selectedPlace.rating}</p>
-                <p>Address: {this.state.selectedPlace.vicinity}</p>
-              </div>
-            </InfoWindow>
-
+            zoom={16}>
+            {this.state.places.map(place => {
+              return (
+                <Marker
+                  key={place.id}
+                  ref={this.addRefs}
+                  onClick={this.onMarkerClick}
+                  name={place.name}
+                  place={place}
+                  //rating={place.rating}
+                  address={place.location.formattedAddress}
+                  position={{
+                    lat: place.location.lat,
+                    lng: place.location.lng
+                  }}
+                />
+              );
+            })}
+            {this.state.showingInfoWindow ? this.makeInfoWindow() : null}
           </Map>
         </div>
       </div>
-
     );
   }
 }
 
 export default GoogleApiWrapper({
-  apiKey: 'AIzaSyAYV2FOC1UKAKyjIAibNXtcKLVb9Wo1VWU'
-})(MapContainer)
+  apiKey: "AIzaSyAYV2FOC1UKAKyjIAibNXtcKLVb9Wo1VWU"
+})(MapContainer);

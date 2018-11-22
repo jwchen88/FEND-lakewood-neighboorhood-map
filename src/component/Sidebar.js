@@ -1,18 +1,17 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import ListPlaces from './ListPlaces.js'
+import React, { Component } from "react";
+import ListPlaces from "./ListPlaces.js";
 
 export class Sidebar extends Component {
-  onClick(place, map, google){
-    if (this.props.onListItemClick){
-      place.place=place;
-      this.props.onListItemClick(place,map,google)
+  onClick(place, map, google) {
+    if (this.props.onListItemClick) {
+      place.place = place;
+      this.props.onListItemClick(place, map, google);
     }
   }
 
-  render(){
-    return(
-      <div className="sidebar" aria-label="restaurant navigation">
+  render() {
+    return (
+      <div className="sidebar">
         <div className="sidebar-title">
           <h2 tabIndex="0">{this.props.title}</h2>
         </div>
@@ -21,8 +20,8 @@ export class Sidebar extends Component {
           onClick={this.onClick.bind(this)}
         />
       </div>
-    )
+    );
   }
 }
 
-export default Sidebar
+export default Sidebar;
