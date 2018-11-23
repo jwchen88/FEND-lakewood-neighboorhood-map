@@ -17,7 +17,7 @@ export class Sidebar extends Component {
         </div>
         <ListPlaces
           places={this.props.places}
-          onClick={this.onClick.bind(this)}
+          onMarkerClick={this.props.onMarkerClick}
         />
       </div>
     );

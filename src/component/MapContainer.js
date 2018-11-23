@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
 //import { searchNearby } from "../utils/GoogleApi";
 import Sidebar from "./Sidebar.js";
-import axios from 'axios'
+import axios from "axios";
 import escapeRegExp from "escape-string-regexp";
 
 export class MapContainer extends Component {
@@ -18,7 +18,7 @@ export class MapContainer extends Component {
     query: ""
   };
 
-/*
+  /*
   onReady(mapProps, map) {
     const { google } = this.props;
     const opts = {
@@ -38,13 +38,13 @@ export class MapContainer extends Component {
   }
   */
 
-//get data from four square
-  componentDidMount(){
-    this.getVenues()
-  }
+  //get data from four square
+  componentDidMount = () => {
+    this.getVenues();
+  };
 
   getVenues = () => {
-    const endPoint = "https://api.foursquare.com/v2/venues/search?"
+    const endPoint = "https://api.foursquare.com/v2/venues/search?";
     const parameters = {
       client_id: "HHUV2BREYTPF4NC4ANOYCCROTNLB4FQATM4TVC4ULI4DUA0T",
       client_secret: "B3Y3MCPEXNGDF5U03GJON1J10JIZIQIO05WAYQFO1GLPJUH0",
@@ -53,21 +53,24 @@ export class MapContainer extends Component {
       categoryId: "4d4b7105d754a06374d81259",
       ll: "32.8132922, -96.7521698",
       v: "20181111"
-    }
+    };
 
-    axios.get(endPoint + new URLSearchParams(parameters))
-    .then(response => {
-      this.setState({
-        places: response.data.response.venues
+    axios
+      .get(endPoint + new URLSearchParams(parameters))
+      .then(response => {
+        console.log(response);
+        this.setState({
+          places: response.data.response.venues
+        });
       })
-    })
-    .catch(error => {
-      console.log("Error!" + error)
-    })
-  }
+      .catch(error => {
+        console.log("Error!" + error);
+      });
+  };
 
-//Click on a Marker
+  //Click on a Marker
   onMarkerClick = (props, marker, e) => {
+    console.log(marker);
     this.killAnimation();
     const { map, infoWindow } = this.state;
     //Change the content
@@ -79,10 +82,19 @@ export class MapContainer extends Component {
     `);
     //Open An InfoWindow
     if (marker !== undefined) {
+      console.log(map);
       infoWindow.open(map, marker);
     } else {
-      this.state.markers.map(marker => {
+      this.state.markers.forEach(marker => {
+        console.log(marker);
         if (props.name === marker.name) {
+          marker.setMap(this.state.map);
+          this.state.infoWindow.setContent(`
+          <div>
+          <h4>${marker.name}</h4>
+          <p>Address: ${marker.address}</p>
+          </div>
+        `);
           infoWindow.open(map, marker);
         }
       });
@@ -103,16 +115,17 @@ export class MapContainer extends Component {
   refs = [];
 
   addRefs = elem => {
-    this.setState(
-      prevState => ({
-        markers: [...prevState.markers, elem.marker]
-      }),
-      () => console.log(this.state.markers)
-    );
+    this.setState(prevState => ({
+      markers: [...prevState.markers, elem.marker]
+    }));
   };
 
   updateQuery = query => {
     this.setState({ query: query });
+  };
+
+  addMap = elem => {
+    this.setState({ map: elem.map }, () => console.log(this.state.map));
   };
 
   render() {
@@ -128,12 +141,13 @@ export class MapContainer extends Component {
       <div>
         <Sidebar
           title={"Restaurants"}
-          onListItemClick={this.onMarkerClick.bind(this)}
+          onMarkerClick={this.onMarkerClick}
           places={this.state.places}
         />
 
         <div className="map">
           <Map
+            ref={this.addMap}
             style={{ height: "100%", width: "75vw", position: "absolute" }}
             //onReady={this.onReady.bind(this)}
             google={this.props.google}

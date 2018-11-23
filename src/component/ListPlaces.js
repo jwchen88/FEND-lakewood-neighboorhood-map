@@ -39,7 +39,11 @@ export class ListPlaces extends Component {
         </div>
         {showingPlaces.map(place => {
           return (
-            <Place key={place.id} place={place} onClick={this.props.onClick} />
+            <Place
+              key={place.id}
+              place={place}
+              onMarkerClick={this.props.onMarkerClick}
+            />
           );
         })}
       </div>
