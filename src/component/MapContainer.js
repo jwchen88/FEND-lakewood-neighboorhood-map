@@ -15,7 +15,7 @@ export class MapContainer extends Component {
     markers: [],
     infoWindow: null,
     map: null,
-    query: ""
+    filtered: null
   };
 
   /*
@@ -37,6 +37,9 @@ export class MapContainer extends Component {
       .catch((status, result) => {});
   }
   */
+mapReady = (props, map) => {
+  this.setState({map});
+}
 
   //get data from four square
   componentDidMount = () => {
@@ -71,7 +74,7 @@ export class MapContainer extends Component {
 
   //Click on a Marker
   onMarkerClick = (props, marker, e) => {
-    console.log(marker);
+    //console.log(marker);
     this.killAnimation();
     const { map, infoWindow } = this.state;
     //Change the content
@@ -83,11 +86,11 @@ export class MapContainer extends Component {
     `);
     //Open An InfoWindow
     if (marker !== undefined) {
-      console.log(map);
+      //console.log(map);
       infoWindow.open(map, marker);
     } else {
       this.state.markers.forEach(marker => {
-        console.log(marker);
+        //console.log(marker);
         if (props.name === marker.name) {
           marker.setMap(this.state.map);
           this.state.infoWindow.setContent(`
@@ -121,43 +124,46 @@ export class MapContainer extends Component {
     }));
   };
 
-  updateQuery = query => {
-    this.setState({ query: query });
-  };
-
   addMap = elem => {
     this.setState({ map: elem.map }, () => console.log(this.state.map));
   };
 
-  render() {
-    let showingPlaces;
-    if (this.state.query) {
-      const match = new RegExp(escapeRegExp(this.state.query), "i");
-      showingPlaces = this.props.places.filter(place => match.test(place.name));
-    } else {
-      showingPlaces = this.props.places;
-    }
+  updateQuery = query => {
+    //Update the query value and filter and list of locations accordingly
+    this.setState({
+      filtered: this.filterPlaces(this.state.places, query)
+    });
+  };
 
+  filterPlaces = (places, query) => {
+    return places.filter(place => place.name.toLowerCase().includes(query.toLowerCase()));
+  }
+
+  render() {
     return (
       <div className="container">
         <Sidebar
           title={"Restaurants"}
           onMarkerClick={this.onMarkerClick}
-          places={this.state.places}
+          places={this.state.filtered}
+          filterPlaces={this.updateQuery}
         />
 
         <div className="map">
           <Map
+            role="application"
+            aria-label="map"
             ref={this.addMap}
             style={{ height: "100%", width: "75vw", position: "absolute" }}
             //onReady={this.onReady.bind(this)}
+            onReady={this.mapReady}
             google={this.props.google}
             initialCenter={{
               lat: 32.8124432,
               lng: -96.7514695
             }}
             zoom={16}>
-            {this.state.places.map(place => {
+            {this.state.filtered.map(place => {
               return (
                 <Marker
                   key={place.id}

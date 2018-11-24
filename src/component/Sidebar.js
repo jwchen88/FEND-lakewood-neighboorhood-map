@@ -16,7 +16,7 @@ export class Sidebar extends Component {
           <h2 tabIndex="0">{this.props.title}</h2>
         </div>
         <ListPlaces
-          places={this.props.places}
+          places={this.props.filtered}
           onMarkerClick={this.props.onMarkerClick}
         />
       </div>

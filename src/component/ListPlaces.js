@@ -12,18 +12,12 @@ export class ListPlaces extends Component {
     query: ""
   };
 
-  updateQuery = query => {
-    this.setState({ query: query });
+  updateQuery = newQuery => {
+    this.setState({ query: newQuery });
+    this.props.filterPlaces(newQuery)
   };
 
   render() {
-    let showingPlaces;
-    if (this.state.query) {
-      const match = new RegExp(escapeRegExp(this.state.query), "i");
-      showingPlaces = this.props.places.filter(place => match.test(place.name));
-    } else {
-      showingPlaces = this.props.places;
-    }
 
     return (
       <div className="place-list">
@@ -37,7 +31,7 @@ export class ListPlaces extends Component {
             onChange={event => this.updateQuery(event.target.value)}
           />
         </div>
-        {showingPlaces.map(place => {
+        {this.props.places.map(place => {
           return (
             <Place
               key={place.id}
