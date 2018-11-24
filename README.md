@@ -1,4 +1,4 @@
-#Lakewood Neighborhood Map Project
+# Lakewood Neighborhood Map Project
 
 This is the final project for Udacity's GWG FEND Nanodegree course. Neighborhood Map project is a single page application featuring a map of Lakewood neighborhood in Dallas, TX. The map shows restaurants in the neighborhood, and it get restaurants' address information from Four Square.
 
