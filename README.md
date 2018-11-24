@@ -1,6 +1,6 @@
 # Lakewood Neighborhood Map Project
 
-This is the final project for Udacity's GWG FEND Nanodegree course. Neighborhood Map project is a single page application featuring a map of Lakewood neighborhood in Dallas, TX. The map shows restaurants in the neighborhood, and it get restaurants' address information from Four Square.
+This is the final project for Udacity's GWG FEND Nanodegree course. Neighborhood Map project is a single page application featuring a map of Lakewood neighborhood in Dallas, TX. The map shows restaurants in the neighborhood, and it gets restaurants' address information through Four Square.
 
 ## How to Run the Project
 
@@ -16,9 +16,9 @@ The service worker only works when npm build is ran in production mode.
 If server isn't installed run `npm install -g serve` before `serve -s build`
 
 ## Acknowledgements
-* Google Map React Component Tutorial https://github.com/fullstackreact/google-maps-react
-* Yahya Elharony Neighborhood Map Walk-Thru https://www.youtube.com/channel/UCcWSbBe_s-T_gZRnqFbtyIA
-* FEND P7 Walkthrough with Doug Brown [Project Coach] https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
+* [Google Map React Component Tutorial](https://github.com/fullstackreact/google-maps-react)
+* [Yahya Elharony Neighborhood Map Walk-Thru](https://www.youtube.com/channel/UCcWSbBe_s-T_gZRnqFbtyIA)
+* [FEND P7 Walkthrough with Doug Brown Project Coach](https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be)
 
 ## Create React App
 
