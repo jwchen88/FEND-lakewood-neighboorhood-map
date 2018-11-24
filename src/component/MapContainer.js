@@ -65,6 +65,7 @@ export class MapContainer extends Component {
       })
       .catch(error => {
         console.log("Error!" + error);
+        alert("FourSquare data could not be retrieved" + error);
       });
   };
 
@@ -138,7 +139,7 @@ export class MapContainer extends Component {
     }
 
     return (
-      <div>
+      <div className="container">
         <Sidebar
           title={"Restaurants"}
           onMarkerClick={this.onMarkerClick}

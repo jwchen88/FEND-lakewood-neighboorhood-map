@@ -5,7 +5,7 @@ export class Place extends Component {
     const { place } = this.props;
     return (
       <div className="place" onClick={() => this.props.onMarkerClick(place)}>
-        <h3 tabIndex="0">{place.name}</h3>
+        <h3 tabIndex="0" aria-label="restaurant name" role="listitem">{place.name}</h3>
       </div>
     );
   }
