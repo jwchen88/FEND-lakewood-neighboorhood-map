@@ -31,7 +31,7 @@ export class ListPlaces extends Component {
             onChange={event => this.updateQuery(event.target.value)}
           />
         </div>
-        {this.props.places.map(place => {
+        {this.props.filtered.map(place => {
           return (
             <Place
               key={place.id}

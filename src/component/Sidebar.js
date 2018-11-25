@@ -18,6 +18,7 @@ export class Sidebar extends Component {
         <ListPlaces
           places={this.props.filtered}
           onMarkerClick={this.props.onMarkerClick}
+          filterPlaces={this.props.updateQuery}
         />
       </div>
     );
