@@ -70,7 +70,7 @@ export class MapContainer extends Component {
 
   //Click on a Marker
   onMarkerClick = (props, marker, e) => {
-    console.log(marker);
+    //console.log(marker);
     this.killAnimation();
     const { map, infoWindow } = this.state;
     //Change the content
@@ -82,11 +82,11 @@ export class MapContainer extends Component {
     `);
     //Open An InfoWindow
     if (marker !== undefined) {
-      console.log(map);
+      //console.log(map);
       infoWindow.open(map, marker);
     } else {
       this.state.markers.forEach(marker => {
-        console.log(marker);
+        //console.log(marker);
         if (props.name === marker.name) {
           marker.setMap(this.state.map);
           this.state.infoWindow.setContent(`
@@ -149,6 +149,8 @@ export class MapContainer extends Component {
 
         <div className="map">
           <Map
+            role="application"
+            aria-label="map"
             ref={this.addMap}
             style={{ height: "100%", width: "75vw", position: "absolute" }}
             //onReady={this.onReady.bind(this)}
