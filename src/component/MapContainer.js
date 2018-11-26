@@ -14,8 +14,7 @@ export class MapContainer extends Component {
     selectedPlace: [],
     markers: [],
     infoWindow: null,
-    map: null,
-    query: ""
+    map: null
   };
 
   /*
@@ -121,21 +120,21 @@ export class MapContainer extends Component {
     }));
   };
 
-  updateQuery = query => {
-    this.setState({ query: query });
-  };
-
   addMap = elem => {
     this.setState({ map: elem.map }, () => console.log(this.state.map));
+  };
+
+  updateQuery = query => {
+    this.setState({ query: query });
   };
 
   render() {
     let showingPlaces;
     if (this.state.query) {
       const match = new RegExp(escapeRegExp(this.state.query), "i");
-      showingPlaces = this.props.places.filter(place => match.test(place.name));
+      showingPlaces = this.state.places.filter(place => match.test(place.name));
     } else {
-      showingPlaces = this.props.places;
+      showingPlaces = this.state.places;
     }
 
     return (
@@ -144,6 +143,8 @@ export class MapContainer extends Component {
           title={"Restaurants"}
           onMarkerClick={this.onMarkerClick}
           places={this.state.places}
+          updateQuery={this.updateQuery}
+          showingPlaces={showingPlaces}
         />
 
         <div className="map">
@@ -157,7 +158,7 @@ export class MapContainer extends Component {
               lng: -96.7514695
             }}
             zoom={16}>
-            {this.state.places.map(place => {
+            {showingPlaces.map(place => {
               return (
                 <Marker
                   key={place.id}
