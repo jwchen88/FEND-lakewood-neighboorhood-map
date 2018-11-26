@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import ListPlaces from "./ListPlaces.js";
 
 export class Sidebar extends Component {
-  onClick(place, map, google) {
+  onClick = (place, map, google) => {
     if (this.props.onListItemClick) {
       place.place = place;
       this.props.onListItemClick(place, map, google);
     }
-  }
+  };
 
   render() {
     return (

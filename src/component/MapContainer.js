@@ -15,7 +15,8 @@ export class MapContainer extends Component {
     markers: [],
     infoWindow: null,
     map: null,
-    query: ""
+    query: "",
+    showingPlaces: []
   };
 
   /*
@@ -59,9 +60,13 @@ export class MapContainer extends Component {
       .get(endPoint + new URLSearchParams(parameters))
       .then(response => {
         console.log(response);
-        this.setState({
-          places: response.data.response.venues
-        });
+        this.setState(
+          {
+            places: response.data.response.venues,
+            showingPlaces: response.data.response.venues
+          },
+          () => console.log(this.state)
+        );
       })
       .catch(error => {
         console.log("Error!" + error);
@@ -116,9 +121,12 @@ export class MapContainer extends Component {
   refs = [];
 
   addRefs = elem => {
-    this.setState(prevState => ({
-      markers: [...prevState.markers, elem.marker]
-    }));
+    if (!elem) return;
+    else {
+      this.setState(prevState => ({
+        markers: [...prevState.markers, elem.marker]
+      }));
+    }
   };
 
   addMap = elem => {
@@ -126,10 +134,12 @@ export class MapContainer extends Component {
   };
 
   updateQuery = query => {
-    this.setState({ query: query });
+    this.setState({ query: query }, () => {
+      this.filterStuff(query);
+    });
   };
 
-  render() {
+  filterStuff = query => {
     let showingPlaces;
     if (this.state.query) {
       const match = new RegExp(escapeRegExp(this.state.query), "i");
@@ -137,7 +147,12 @@ export class MapContainer extends Component {
     } else {
       showingPlaces = this.state.places;
     }
+    this.setState({
+      showingPlaces
+    });
+  };
 
+  render() {
     return (
       <div className="container">
         <Sidebar
@@ -145,8 +160,8 @@ export class MapContainer extends Component {
           onMarkerClick={this.onMarkerClick}
           places={this.state.places}
           updateQuery={this.updateQuery}
-          showingPlaces={showingPlaces}
           query={this.state.query}
+          showingPlaces={this.state.showingPlaces}
         />
 
         <div className="map">
@@ -162,7 +177,7 @@ export class MapContainer extends Component {
               lng: -96.7514695
             }}
             zoom={16}>
-            {showingPlaces.map(place => {
+            {this.state.showingPlaces.map(place => {
               return (
                 <Marker
                   key={place.id}
