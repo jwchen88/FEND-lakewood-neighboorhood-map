@@ -7,12 +7,6 @@ export class ListPlaces extends Component {
     places: PropTypes.array.isRequired
   };
 
-  state = {
-    query: ""
-  };
-
-
-
   render() {
     return (
       <div className="place-list">
@@ -22,7 +16,7 @@ export class ListPlaces extends Component {
             className="search-restaurant"
             type="text"
             placeholder="Search"
-            value={this.state.query}
+            value={this.props.query}
             onChange={event => this.props.updateQuery(event.target.value)}
           />
         </div>

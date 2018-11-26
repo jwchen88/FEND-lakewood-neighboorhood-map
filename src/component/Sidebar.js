@@ -20,6 +20,7 @@ export class Sidebar extends Component {
           onMarkerClick={this.props.onMarkerClick}
           updateQuery={this.props.updateQuery}
           showingPlaces={this.props.showingPlaces}
+          query={this.props.query}
         />
       </div>
     );

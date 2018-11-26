@@ -14,7 +14,8 @@ export class MapContainer extends Component {
     selectedPlace: [],
     markers: [],
     infoWindow: null,
-    map: null
+    map: null,
+    query: ""
   };
 
   /*
@@ -145,6 +146,7 @@ export class MapContainer extends Component {
           places={this.state.places}
           updateQuery={this.updateQuery}
           showingPlaces={showingPlaces}
+          query={this.state.query}
         />
 
         <div className="map">
